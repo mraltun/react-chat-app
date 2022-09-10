@@ -7,7 +7,7 @@ import "./style.scss";
 const App = () => {
   return (
     <div>
-      <Register />
+      <Home />
     </div>
   );
 };
