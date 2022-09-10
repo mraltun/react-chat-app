@@ -1,4 +1,6 @@
 import React from "react";
+import Messages from "./Messages";
+import Input from "./Input";
 import Cam from "../img/cam.png";
 import Add from "../img/add.png";
 import More from "../img/more.png";
@@ -14,6 +16,8 @@ const Chat = () => {
           <img src={More} alt='' />
         </div>
       </div>
+      <Messages />
+      <Input />
     </div>
   );
 };
