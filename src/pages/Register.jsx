@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import Add from "../img/addAvatar.png";
 
 const Register = () => {
+  const [error, setError] = useState();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const displayName = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const file = e.target[3].value[0];
+
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      setError(true);
+    }
+  };
+
   return (
     <div className='formContainer'>
       <div className='formWrapper'>
         <span className='logo'>Chat App</span>
         <span className='title'>Register</span>
-        <form>
+        <form onSubmit={handleSubmit}>
           <input type='text' placeholder='display name' />
           <input type='email' placeholder='email' />
           <input type='password' placeholder='password' />
@@ -17,6 +35,7 @@ const Register = () => {
             <span>Add an avatar</span>
           </label>
           <button>Sign Up</button>
+          {error && <span>Something went wrong</span>}
         </form>
         <p>Do you have an account? Login</p>
       </div>
