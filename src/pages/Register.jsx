@@ -3,10 +3,13 @@ import { auth, db, storage } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import Add from "../img/addAvatar.png";
 
 const Register = () => {
   const [error, setError] = useState();
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,6 +41,7 @@ const Register = () => {
               photoURL: downloadURL,
             });
             await setDoc(db, "userChats", res.user.uid, {});
+            navigate("/");
           });
         }
       );
