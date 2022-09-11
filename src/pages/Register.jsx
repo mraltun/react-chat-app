@@ -37,6 +37,7 @@ const Register = () => {
               email,
               photoURL: downloadURL,
             });
+            await setDoc(db, "userChats", res.user.uid, {});
           });
         }
       );
