@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { auth, storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -31,11 +31,15 @@ const Register = () => {
               displayName,
               photoURL: downloadURL,
             });
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            });
           });
         }
       );
-
-      await setDoc(doc());
     } catch (err) {
       setError(true);
     }
