@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-import Img from "../img/img.png";
-import Attach from "../img/attach.png";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import {
@@ -13,6 +11,8 @@ import {
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import Img from "../img/img.png";
+import Attach from "../img/attach.png";
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -24,12 +24,11 @@ const Input = () => {
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());
-
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
         (error) => {
-          //TODO:Handle Error
+          console.log(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -73,6 +72,11 @@ const Input = () => {
     setText("");
     setImg(null);
   };
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) handleSend();
+  };
+
   return (
     <div className='input'>
       <input
@@ -80,6 +84,7 @@ const Input = () => {
         placeholder='Type something...'
         onChange={(e) => setText(e.target.value)}
         value={text}
+        onKeyDown={handleKeyDown}
       />
       <div className='send'>
         <img src={Attach} alt='' />
