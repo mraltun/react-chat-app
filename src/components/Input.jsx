@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import Img from "../img/img.png";
+import Attach from "../img/attach.png";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import {
@@ -8,11 +10,9 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
-import Img from "../img/img.png";
-import Attach from "../img/attach.png";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -24,10 +24,13 @@ const Input = () => {
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());
+
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
-        (error) => {},
+        (error) => {
+          //TODO:Handle Error
+        },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateDoc(doc(db, "chats", data.chatId), {
@@ -70,12 +73,11 @@ const Input = () => {
     setText("");
     setImg(null);
   };
-
   return (
     <div className='input'>
       <input
         type='text'
-        placeholder='Type something..'
+        placeholder='Type something...'
         onChange={(e) => setText(e.target.value)}
         value={text}
       />
